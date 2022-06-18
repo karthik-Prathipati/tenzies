@@ -11,13 +11,19 @@ export default function App() {
   // time state that used to change on the basis of tenzies not working
   // const [record, setRecord] = React.useState(0)
   // var startTime = 0;
-
+  const [stop, setStop] = React.useState(false)
+  const [time, setTime] = React.useState({
+    seconds: 0,
+    minutes: 0,
+    hours: 0,
+  })
   React.useEffect(() => {
     const allHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
     const allSameValue = dice.every(die => die.value === firstValue)
     if (allHeld && allSameValue) {
       setTenzies(true)
+      setStop(true)
     }
   }, [dice])
   // use effect for time is showing errors and not displaying any time just showing NaN
@@ -36,6 +42,40 @@ export default function App() {
   //     })
   //   }
   // }, [tenzies])
+  React.useEffect(() => {
+    setStop(false);
+    const advanceTime = () => {
+
+      setTimeout(() => {
+
+        let nSeconds = time.seconds;
+        let nMinutes = time.minutes;
+        let nHours = time.hours;
+
+        nSeconds++;
+
+        if (nSeconds > 59) {
+          nMinutes++;
+          nSeconds = 0;
+        }
+        if (nMinutes > 59) {
+          nHours++;
+          nMinutes = 0;
+        }
+        if (nHours > 24) {
+          nHours = 0;
+        }
+
+        !stop && setTime({ seconds: nSeconds, minutes: nMinutes, hours: nHours });
+      }, 1000);
+    };
+    advanceTime();
+
+    return () => {
+      //final time:
+      setStop(true)
+    };
+  }, [time]);
 
   function generateNewDie() {
     return {
@@ -63,6 +103,7 @@ export default function App() {
       }))
     } else {
       setTenzies(false)
+      setStop(false)
       setDice(allNewDice())
     }
   }
@@ -108,6 +149,15 @@ export default function App() {
         </p>
 
       </div> */}
+      <div className='time'>
+        <p>
+          {`
+          ${time.hours < 10 ? '0' + time.hours : time.hours} :
+          ${time.minutes < 10 ? '0' + time.minutes : time.minutes} :
+          ${time.seconds < 10 ? '0' + time.seconds : time.seconds}
+        `}
+        </p>
+      </div>
     </main>
   )
 }
