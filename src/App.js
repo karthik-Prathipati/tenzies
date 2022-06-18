@@ -8,6 +8,9 @@ export default function App() {
 
   const [dice, setDice] = React.useState(allNewDice())
   const [tenzies, setTenzies] = React.useState(false)
+  // time state that used to change on the basis of tenzies not working
+  // const [record, setRecord] = React.useState(0)
+  // var startTime = 0;
 
   React.useEffect(() => {
     const allHeld = dice.every(die => die.isHeld)
@@ -17,6 +20,22 @@ export default function App() {
       setTenzies(true)
     }
   }, [dice])
+  // use effect for time is showing errors and not displaying any time just showing NaN
+  // create a new function for time that does not use Date fuction init
+  // React.useEffect(() => {
+  //   if (!tenzies) {
+  //     startTime = new Date();
+  //   }
+  //   else {
+  //     let endTime = new Date();
+  //     const timeElapsed = endTime - startTime;
+  //     console.log(startTime + " " + endTime);
+  //     setRecord(prevRecord => {
+  //       if (prevRecord === 0) return timeElapsed;
+  //       else return prevRecord > timeElapsed ? timeElapsed : prevRecord;
+  //     })
+  //   }
+  // }, [tenzies])
 
   function generateNewDie() {
     return {
@@ -80,6 +99,15 @@ export default function App() {
       >
         {tenzies ? "New Game" : "Roll"}
       </button>
+      {/* // div used to display the time  */}
+      {/* <div className='time'>
+        <p>
+          {
+            `${record / 60000 < 10 ? '0' + record / 60000 : record / 60000} mins : ${record / 1000 < 10 ? '0' + record / 1000 : record / 1000} secs`
+          }
+        </p>
+
+      </div> */}
     </main>
   )
 }
