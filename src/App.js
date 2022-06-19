@@ -17,15 +17,50 @@ export default function App() {
     minutes: 0,
     hours: 0,
   })
+  const [minTime, setMinTime] = React.useState({
+    hours: 100,
+    seconds: 0,
+    minutes: 0
+  })
   React.useEffect(() => {
     const allHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
     const allSameValue = dice.every(die => die.value === firstValue)
     if (allHeld && allSameValue) {
+
       setTenzies(true)
       setStop(true)
+      checkMinTime()
     }
   }, [dice])
+
+  function checkMinTime() {
+    console.log(time.seconds +" "+minTime.seconds)
+    setMinTime(prevTime => {
+      if (time.hours < prevTime.hours) {
+        return {
+          hours: time.hours,
+          minutes: time.minutes,
+          seconds: time.seconds
+        }
+      }
+      else if (time.minutes < prevTime.minutes) {
+        return {
+          hours: time.hours,
+          minutes: time.minutes,
+          seconds: time.seconds
+        }
+      }
+      else if (time.seconds < prevTime.seconds) {
+        return {
+          hours: time.hours,
+          minutes: time.minutes,
+          seconds: time.seconds
+        }
+      }
+      else return prevTime
+    });
+  }
   // use effect for time is showing errors and not displaying any time just showing NaN
   // create a new function for time that does not use Date fuction init
   // React.useEffect(() => {
@@ -43,9 +78,7 @@ export default function App() {
   //   }
   // }, [tenzies])
   React.useEffect(() => {
-    setStop(false);
     const advanceTime = () => {
-
       setTimeout(() => {
 
         let nSeconds = time.seconds;
@@ -73,7 +106,7 @@ export default function App() {
 
     return () => {
       //final time:
-      setStop(true)
+      console.log(time.seconds);
     };
   }, [time]);
 
@@ -102,8 +135,13 @@ export default function App() {
           generateNewDie()
       }))
     } else {
-      setTenzies(false)
       setStop(false)
+      setTime({
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+      })
+      setTenzies(false)
       setDice(allNewDice())
     }
   }
@@ -124,7 +162,7 @@ export default function App() {
       holdDice={() => holdDice(die.id)}
     />
   ))
-
+  const curr = tenzies ? minTime : time
   return (
     <main>
       {tenzies && <Confetti />}
@@ -149,15 +187,18 @@ export default function App() {
         </p>
 
       </div> */}
-      <div className='time'>
-        <p>
-          {`
-          ${time.hours < 10 ? '0' + time.hours : time.hours} :
-          ${time.minutes < 10 ? '0' + time.minutes : time.minutes} :
-          ${time.seconds < 10 ? '0' + time.seconds : time.seconds}
+
+      {
+        <div className='time'>
+          {tenzies && <h3>Lowest time record</h3>}
+          <p>
+            {`
+          ${curr.hours < 10 ? '0' + curr.hours : curr.hours} :
+          ${curr.minutes < 10 ? '0' + curr.minutes : curr.minutes} :
+          ${curr.seconds < 10 ? '0' + curr.seconds : curr.seconds}
         `}
-        </p>
-      </div>
+          </p>
+        </div>}
     </main>
   )
 }
