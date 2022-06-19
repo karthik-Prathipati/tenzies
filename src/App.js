@@ -37,8 +37,8 @@ export default function App() {
   function checkMinTime() {
     // fucntion used to check wheather the player created a record time or not
     // if yes now this will change the state of minTime
-    if (time.hours < prevTime.hours || (time.hours === prevTime.hours && time.minutes < prevTime.minutes)
-      || (time.hours === prevTime.hours && time.minutes === prevTime.minutes && time.minutes < prevTime.minutes)) {
+    if (time.hours < minTime.hours || (time.hours === minTime.hours && time.minutes < minTime.minutes)
+      || (time.hours === minTime.hours && time.minutes === minTime.minutes && time.minutes < minTime.minutes)) {
       setMinTime(time)
     }
   }
@@ -84,11 +84,6 @@ export default function App() {
       }, 1000);
     };
     advanceTime();
-
-    return () => {
-      //final time:
-      console.log(time.seconds);
-    };
   }, [time]);
 
   function generateNewDie() {
