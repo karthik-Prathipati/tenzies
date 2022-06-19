@@ -18,9 +18,9 @@ export default function App() {
     hours: 0,
   })
   const [minTime, setMinTime] = React.useState({
-    hours: 100,
     seconds: 0,
-    minutes: 0
+    minutes: 0,
+    hours: 100,
   })
   React.useEffect(() => {
     const allHeld = dice.every(die => die.isHeld)
@@ -35,31 +35,12 @@ export default function App() {
   }, [dice])
 
   function checkMinTime() {
-    console.log(time.seconds +" "+minTime.seconds)
-    setMinTime(prevTime => {
-      if (time.hours < prevTime.hours) {
-        return {
-          hours: time.hours,
-          minutes: time.minutes,
-          seconds: time.seconds
-        }
-      }
-      else if (time.minutes < prevTime.minutes) {
-        return {
-          hours: time.hours,
-          minutes: time.minutes,
-          seconds: time.seconds
-        }
-      }
-      else if (time.seconds < prevTime.seconds) {
-        return {
-          hours: time.hours,
-          minutes: time.minutes,
-          seconds: time.seconds
-        }
-      }
-      else return prevTime
-    });
+    // fucntion used to check wheather the player created a record time or not
+    // if yes now this will change the state of minTime
+    if (time.hours < prevTime.hours || (time.hours === prevTime.hours && time.minutes < prevTime.minutes)
+      || (time.hours === prevTime.hours && time.minutes === prevTime.minutes && time.minutes < prevTime.minutes)) {
+      setMinTime(time)
+    }
   }
   // use effect for time is showing errors and not displaying any time just showing NaN
   // create a new function for time that does not use Date fuction init
@@ -187,7 +168,6 @@ export default function App() {
         </p>
 
       </div> */}
-
       {
         <div className='time'>
           {tenzies && <h3>Lowest time record</h3>}
